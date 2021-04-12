@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from controller.message import BaseMessage
+from controller.message import BaseMessage, BaseFollowers
 
 app = Flask(__name__)
 # apply CORS
@@ -45,6 +45,34 @@ def handleRemoveUnlike(pid):
 def handleUnliked(pid):
     if request.method == 'GET':
         return BaseMessage().getUnliked(pid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/follow/<int:uid>', methods=['POST'])
+def handleAddFollower(uid):
+    if request.method == 'POST':
+        return BaseFollowers().insertFollowers(uid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/followedby/<int:uid>', methods=['GET'])
+def handleGetFollowing(uid):
+    if request.method == 'GET':
+        return BaseFollowers().getFollowing(uid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/follows/<int:uid>', methods=['GET'])
+def handleGetFollower(uid):
+    if request.method == 'GET':
+        return BaseFollowers().getFollowers(uid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/unfollow/<int:uid>', methods=['POST'])
+def handleAddUnfollow(uid, fuid):
+    if request.method == 'POST':
+        return BaseFollowers().insertUnfollowing(uid, fuid)
     else:
         return jsonify("Method Not Allowed"), 405
 

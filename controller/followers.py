@@ -1,7 +1,7 @@
 from flask import jsonify
 from model.followers import FollowersDAO
 
-class baseFollowers:
+class BaseFollowers:
 
     def build_map_dict(self, row):
         result = {}
