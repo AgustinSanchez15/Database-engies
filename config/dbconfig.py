@@ -4,3 +4,9 @@ pg_config = {
     'dbname' : 'db1',
     'dbport' : 8083
 }
+# pg_config = {
+#     'user' : 'username',
+#     'password' : 'password',
+#     'dbname' : 'db1',
+#     'dbport' : 8083
+# }

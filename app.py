@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from controller.message import BaseMessage
+from controller.block import BaseBlock
 
 app = Flask(__name__)
 # apply CORS
@@ -45,6 +46,34 @@ def handleRemoveUnlike(pid):
 def handleUnliked(pid):
     if request.method == 'GET':
         return BaseMessage().getUnliked(pid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/block/<int:uid>', methods=['POST'])
+def handleBlockUser(uid):
+    if request.method == 'POST':
+        return BaseBlock().blockUser(uid, request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/blocking/<int:uid>', methods=['GET'])
+def handleBlocking(uid):
+    if request.method == 'GET':
+        return BaseBlock().getBlocking(uid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/blockedby/<int:uid>', methods=['GET'])
+def handleBlocked(uid):
+    if request.method == 'GET':
+        return BaseBlock().getBlocked(uid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/unblock/<int:uid>', methods=['POST'])
+def handleUnblock(uid):
+    if request.method == 'POST':
+        return BaseBlock().unblock(uid, request.json)
     else:
         return jsonify("Method Not Allowed"), 405
 
