@@ -1,7 +1,7 @@
 from flask import jsonify
-from model.message import MessageDAO
+from model.like import MessageDAO
 
-class BaseMessage:
+class BaseLike:
 
     def build_map_dict(self, row):
         result = {}
