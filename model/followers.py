@@ -19,7 +19,7 @@ class FollowersDAO:
 
     def getFollowing(self, uid):
         cursor = self.conn.cursor()
-        query = "select uid as FollowingUsers, uname as FollowingUsersNames from followers natural inner join users where fuid = %s;"
+        query = "select uid, uname from followers natural inner join users where fuid = %s;"
         cursor.execute(query, (uid,))
         result = []
         for row in cursor:
@@ -28,7 +28,7 @@ class FollowersDAO:
 
     def getFollowers(self, uid):
         cursor = self.conn.cursor()
-        query = "select fuid as UserFollowers, uname as UserFollowersNames from users natural inner followers where uid = %s;"
+        query = "select uid, uname from users natural inner join(select fuid from followers where uid=%s) as fuid where uid=fuid;"
         cursor.execute(query, (uid,))
         result = []
         for row in cursor:

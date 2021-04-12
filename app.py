@@ -52,7 +52,7 @@ def handleUnliked(pid):
 @app.route('/engies/follow/<int:uid>', methods=['POST'])
 def handleAddFollower(uid):
     if request.method == 'POST':
-        return BaseFollowers().insertFollowers(uid)
+        return BaseFollowers().insertFollowers(uid, request.json)
     else:
         return jsonify("Method Not Allowed"), 405
 
@@ -71,9 +71,9 @@ def handleGetFollower(uid):
         return jsonify("Method Not Allowed"), 405
 
 @app.route('/engies/unfollow/<int:uid>', methods=['POST'])
-def handleAddUnfollow(uid, fuid):
+def handleAddUnfollow(uid):
     if request.method == 'POST':
-        return BaseFollowers().insertUnfollowing(uid, fuid)
+        return BaseFollowers().insertUnfollowing(uid, request.json)
     else:
         return jsonify("Method Not Allowed"), 405
 
