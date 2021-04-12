@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from controller.message import BaseMessage, BaseFollowers
+from controller.message import BaseMessage
+from controller.followers import BaseFollowers
 
 app = Flask(__name__)
 # apply CORS
