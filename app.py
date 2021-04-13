@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from controller.like import BaseLike
-from controller.block import BaseBlock
 from controller.followers import BaseFollowers
 from controller.message import BaseMessage
+from controller.block import BaseBlock
+from controller.user import BaseUser
 
 app = Flask(__name__)
 # apply CORS
@@ -140,6 +141,26 @@ def handleGetMessageID(pid):
 def handleGetAllMessages():
     if request.method == 'GET':
         return BaseMessage().getMessages()
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/users', methods=['GET', 'POST'])
+def handleAddUser():
+    if request.method == 'GET':
+        return BaseUser().retrieveUsers()
+    if request.method == 'POST':
+        return BaseUser().addUser(request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/users/<int:uid>', methods=['PUT', 'GET', 'DELETE'])
+def handlePUTSpecificUser(uid):
+    if request.method == 'PUT':
+        return BaseUser().updateUser(uid, request.json)
+    elif request.method == 'DELETE':
+        return BaseUser().deleteUser(uid)
+    elif request.method == 'GET':
+        return BaseUser().getUserId(uid)
     else:
         return jsonify("Method Not Allowed"), 405
 
