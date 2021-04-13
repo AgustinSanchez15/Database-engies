@@ -1,7 +1,7 @@
 from config.dbconfig import pg_config
 import psycopg2
 
-class MessageDAO:
+class LikeDAO:
     def __init__(self):
         connection_url = "dbname=%s user=%s password=%s port=%s host='localhost'" % (
             pg_config['dbname'], pg_config['user'],

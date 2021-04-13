@@ -3,6 +3,7 @@ from flask_cors import CORS
 from controller.like import BaseLike
 from controller.block import BaseBlock
 from controller.followers import BaseFollowers
+from controller.message import BaseMessage
 
 app = Flask(__name__)
 # apply CORS
@@ -103,6 +104,42 @@ def handleGetFollower(uid):
 def handleAddUnfollow(uid):
     if request.method == 'POST':
         return BaseFollowers().insertUnfollowing(uid, request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/posts', methods=['POST'])
+def handlePostMessage():
+    if request.method == 'POST':
+        return BaseMessage().addMessage(request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+
+@app.route('/engies/reply', methods=['POST'])
+def handleReplyMessage():
+    if request.method == 'POST':
+        return BaseMessage().replyMessage(request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/share', methods=['POST'])
+def handleShareMessage():
+    if request.method == 'POST':
+        return BaseMessage().shareMessage(request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/msg/<int:pid>', methods=['GET'])
+def handleGetMessageID(pid):
+    if request.method == 'GET':
+        return BaseMessage().getMessage(pid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/msg', methods=['GET'])
+def handleGetAllMessages():
+    if request.method == 'GET':
+        return BaseMessage().getMessages()
     else:
         return jsonify("Method Not Allowed"), 405
 
