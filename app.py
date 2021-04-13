@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from controller.message import BaseMessage
 from controller.block import BaseBlock
+from controller.followers import BaseFollowers
 
 app = Flask(__name__)
 # apply CORS
@@ -74,6 +75,32 @@ def handleBlocked(uid):
 def handleUnblock(uid):
     if request.method == 'POST':
         return BaseBlock().unblock(uid, request.json)
+
+@app.route('/engies/follow/<int:uid>', methods=['POST'])
+def handleAddFollower(uid):
+    if request.method == 'POST':
+        return BaseFollowers().insertFollowers(uid, request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/followedby/<int:uid>', methods=['GET'])
+def handleGetFollowing(uid):
+    if request.method == 'GET':
+        return BaseFollowers().getFollowing(uid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/follows/<int:uid>', methods=['GET'])
+def handleGetFollower(uid):
+    if request.method == 'GET':
+        return BaseFollowers().getFollowers(uid)
+    else:
+        return jsonify("Method Not Allowed"), 405
+
+@app.route('/engies/unfollow/<int:uid>', methods=['POST'])
+def handleAddUnfollow(uid):
+    if request.method == 'POST':
+        return BaseFollowers().insertUnfollowing(uid, request.json)
     else:
         return jsonify("Method Not Allowed"), 405
 
