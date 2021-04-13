@@ -8,19 +8,20 @@ ER Video: https://drive.google.com/file/d/1C7pQvszFAFqDgk8ScXROuOtbS1W5qxAf/view
 
 Heroku Rest Api Link: https://engies.herokuapp.com/
 
-Add New User:
-{
-  "uname": ""
-  "upassword": ""
-  "fname": ""
-  "lname": ""
-}
+Add New User:  
+{  
+  "uname": ""  
+  "upassword": ""  
+  "fname": ""  
+  "lname": ""  
+}  
 
-Update User:
-{
-  "uname": ""
-  "upassword": ""
-  "fname": ""
-  "lname": ""
-  "followers": ""
-}
+Update User:  
+{  
+  "uname": ""  
+  "upassword": ""  
+  "fname": ""  
+  "lname": ""  
+  "followers": ""  
+}  
+
