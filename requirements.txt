@@ -35,7 +35,10 @@ paramiko==2.6.0
 pbr==5.5.1
 pexpect==4.6.0
 Pillow==7.0.0
+<<<<<<< HEAD
 pkg-resources==0.0.0
+=======
+>>>>>>> 9ef374a8523914a800298e723a859025c7785151
 progressbar==2.5
 protobuf==3.6.1
 psycopg2-binary==2.8.6
