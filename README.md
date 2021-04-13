@@ -10,12 +10,10 @@ Heroku Rest Api Link: https://engies.herokuapp.com/
 
 Add New User:
 {
-  "uid": ""
   "uname": ""
   "upassword": ""
   "fname": ""
   "lname": ""
-  "followers": ""
 }
 
 Update User:
