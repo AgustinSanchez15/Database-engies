@@ -18,7 +18,7 @@ class BlockDAO:
 
     def getBlocked(self, uid):
         cursor = self.conn.cursor()
-        query = "select uid, uname from users natural inner join (select buid from blocks where uid = 1) as buid where buid=uid;"
+        query = "select uid, uname from users natural inner join (select buid from blocks where uid = %s) as buid where buid=uid;"
         cursor.execute(query, (uid,))
         result = []
         for row in cursor:
