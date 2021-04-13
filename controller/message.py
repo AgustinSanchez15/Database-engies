@@ -5,70 +5,76 @@ class BaseMessage:
 
     def build_map_dict(self, row):
         result = {}
-        result['uid'] = row[0]
-        result['uname'] = row[1]
+        result['ID'] = row[0]
+        result['Text'] = row[1]
+        result['RegisteredUser'] = row[2]
+        result['Date'] = row[3]
         return result
 
-    def build_attr_dict(self, uid, RegisteredUser):
+    def build_attr_dict(self, RegisteredUser, Text):
         result = {}
-        result['uid'] = uid
         result['RegisteredUser'] = RegisteredUser
+        result['Text'] = Text
         return result
 
-    def insertLike(self, pid, json):
+    def build_attr_dictrep(self, RegisteredUser, Text, replyingto):
+        result = {}
+        result['RegisteredUser'] = RegisteredUser
+        result['Text'] = Text
+        result['replyingto'] = replyingto
+        return result
+
+    def build_attr_dictshare(self, RegisteredUser, sharing):
+        result = {}
+        result['RegisteredUser'] = RegisteredUser
+        result['sharing'] = sharing
+        return result
+
+    def addMessage(self, json):
         RegisteredUser = json['RegisteredUser']
+        Text = json['Text']
         dao = MessageDAO()
-        dao.insertLike(pid, RegisteredUser)
-        result = self.build_attr_dict(pid, RegisteredUser)
+        dao.addMessage(RegisteredUser, Text)
+        result = self.build_attr_dict(RegisteredUser, Text)
         return jsonify(result), 201
 
-    def removeLike(self, pid, json):
+    def replyMessage(self, json):
         RegisteredUser = json['RegisteredUser']
+        Text = json['Text']
+        replyingto = json['replyingto']
         dao = MessageDAO()
-        dao.removeLike(pid, RegisteredUser)
-        result = self.build_attr_dict(pid, RegisteredUser)
-        if result:
-            return jsonify("DELETED"), 200
-        else:
-            return jsonify("NOT FOUND"), 404
-
-    def getLiked(self, pid):
-        dao = MessageDAO()
-        users_list = dao.getLiked(pid)
-        result_list = []
-        for row in users_list:
-            obj = self.build_map_dict(row)
-            result_list.append(obj)
-        if result_list:
-            return jsonify(result_list), 200
-        else:
-            return jsonify("NOT FOUND"), 404
-
-    def insertUnlike(self, pid, json):
-        RegisteredUser = json['RegisteredUser']
-        dao = MessageDAO()
-        dao.insertUnlike(pid, RegisteredUser)
-        result = self.build_attr_dict(pid, RegisteredUser)
+        dao.replyMessage(RegisteredUser, Text, replyingto)
+        result = self.build_attr_dictrep(RegisteredUser, Text, replyingto)
         return jsonify(result), 201
 
-    def removeUnlike(self, pid, json):
+    def shareMessage(self, json):
         RegisteredUser = json['RegisteredUser']
+        sharing = json['sharing']
         dao = MessageDAO()
-        dao.removeUnlike(pid, RegisteredUser)
-        result = self.build_attr_dict(pid, RegisteredUser)
+        dao.shareMessage(RegisteredUser, sharing)
+        result = self.build_attr_dictshare(RegisteredUser, sharing)
+        return jsonify(result), 201
+
+    def getMessage(self, pid):
+        dao = MessageDAO()
+        message = dao.getSpecMessage(pid)
+        result = []
+        for row in message:
+            obj = self.build_map_dict(row)
+            result.append(obj)
         if result:
-            return jsonify("DELETED"), 200
+            return jsonify(result), 200
         else:
             return jsonify("NOT FOUND"), 404
 
-    def getUnliked(self, pid):
+    def getMessages(self):
         dao = MessageDAO()
-        users_list = dao.getUnliked(pid)
-        result_list = []
-        for row in users_list:
+        message = dao.getMessages()
+        result = []
+        for row in message:
             obj = self.build_map_dict(row)
-            result_list.append(obj)
-        if result_list:
-            return jsonify(result_list), 200
+            result.append(obj)
+        if result:
+            return jsonify(result), 200
         else:
             return jsonify("NOT FOUND"), 404

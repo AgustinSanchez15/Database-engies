@@ -1,3 +1,5 @@
+from psycopg2._psycopg import cursor
+
 from config.dbconfig import pg_config
 import psycopg2
 
@@ -9,53 +11,40 @@ class MessageDAO:
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
-    def insertLike(self, pid, RegisteredUser):
+    def addMessage(self, RegisteredUser, Text):
         cursor = self.conn.cursor()
-        query = "delete from dislikes where pid=%s and uid=%s"
-        cursor.execute(query, (pid, RegisteredUser))
-        query = "insert into likes (pid, uid) values (%s,%s)"
-        cursor.execute(query, (pid, RegisteredUser))
+        query = "insert into posts(uid, pdate, content) values(%s, NOW(), %s)"
+        cursor.execute(query, (RegisteredUser, Text))
         self.conn.commit()
         return True
 
-    def removeLike(self, pid, RegisteredUser):
+    def replyMessage(self, RegisteredUser, Text, replyingto):
         cursor = self.conn.cursor()
-        query = "delete from likes where pid=%s and uid=%s"
-        cursor.execute(query, (pid, RegisteredUser))
-        affected_rows = cursor.rowcount
+        query = "insert into replies (pid, uid, content) values(%s, %s, %s);"
+        cursor.execute(query, (replyingto, RegisteredUser, Text))
         self.conn.commit()
-        return affected_rows != 0
+        return True
 
-    def getLiked(self, pid):
+    def shareMessage(self, RegisteredUser, sharing):
         cursor = self.conn.cursor()
-        query = "select uid, uname from users natural inner join (select uid from likes where pid = %s) as uid;"
+        query = "insert into shares (pid, uid) values(%s, %s);"
+        cursor.execute(query, (sharing, RegisteredUser))
+        self.conn.commit()
+        return True
+
+    def getSpecMessage(self, pid):
+        cursor = self.conn.cursor()
+        query = "select pid, content, uid, pdate from posts where pid = %s;"
         cursor.execute(query, (pid,))
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def insertUnlike(self, pid, RegisteredUser):
+    def getMessages(self):
         cursor = self.conn.cursor()
-        query = "delete from likes where pid=%s and uid=%s"
-        cursor.execute(query, (pid, RegisteredUser))
-        query = "insert into dislikes (pid, uid) values (%s,%s)"
-        cursor.execute(query, (pid, RegisteredUser))
-        self.conn.commit()
-        return True
-
-    def removeUnlike(self, pid, RegisteredUser):
-        cursor = self.conn.cursor()
-        query = "delete from dislikes where pid=%s and uid=%s"
-        cursor.execute(query, (pid, RegisteredUser))
-        affected_rows = cursor.rowcount
-        self.conn.commit()
-        return affected_rows != 0
-
-    def getUnliked(self, pid):
-        cursor = self.conn.cursor()
-        query = "select uid, uname from users natural inner join (select uid from dislikes where pid = %s) as uid;"
-        cursor.execute(query, (pid,))
+        query = "select pid, content, uid, pdate from posts;"
+        cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
