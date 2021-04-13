@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from controller.message import BaseMessage
 from controller.block import BaseBlock
 from controller.user import BaseUser
 
@@ -79,11 +78,13 @@ def handleUnblock(uid):
         return jsonify("Method Not Allowed"), 405
 
 @app.route('/engies/users', methods=['GET', 'POST'])
-def handleAddUser(uid):
-    if request.method == 'POST':
-        return BaseUser().addUser(uid, request.json)
-    else:
+def handleAddUser():
+    if request.method == 'GET':
         return BaseUser().retrieveUsers()
+    if request.method == 'POST':
+        return BaseUser().addUser(request.json)
+    else:
+        return jsonify("Method Not Allowed"), 405
 
 @app.route('/engies/users/<int:uid>', methods=['PUT', 'GET', 'DELETE'])
 def handlePUTSpecificUser(uid):
@@ -91,41 +92,8 @@ def handlePUTSpecificUser(uid):
         return BaseUser().updateUser(uid, request.json)
     elif request.method == 'DELETE':
         return BaseUser().deleteUser(uid)
-    else:
-        return BaseUser().getUserId
-
-@app.route('/engies/posts', methods=['POST'])
-def handlePostMessage(uid):
-    if request.method == 'POST':
-        return BaseMessage().addMessage(request.json)
-    else:
-        return jsonify("Method Not Allowed"), 405
-
-@app.route('/engies/reply', methods=['POST'])
-def handleReplyMessage(uid):
-    if request.method == 'POST':
-        return
-    else:
-        return jsonify("Method Not Allowed"), 405
-
-@app.route('/engies/share', methods=['POST'])
-def handleShareMessage(uid):
-    if request.method == 'POST':
-        return BaseMessage.getShares()
-    else:
-        return jsonify("Method Not Allowed"), 405
-
-@app.route('/engies/msg/<int:pid>', methods=['GET'])
-def handleGetMessageID(pid):
-    if request.method == 'GET':
-        return BaseMessage.getSpecMessage()
-    else:
-        return jsonify("Method Not Allowed"), 405
-
-@app.route('/engies/msg', methods=['GET'])
-def handleGetAllMessages(pid):
-    if request.method == 'GET':
-        return BaseMessage.getMessage()
+    elif request.method == 'GET':
+        return BaseUser().getUserId(uid)
     else:
         return jsonify("Method Not Allowed"), 405
 

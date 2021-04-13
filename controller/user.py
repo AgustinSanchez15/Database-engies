@@ -23,15 +23,14 @@ class BaseUser:
         result['followers'] = followers
         return result
 
-    def addUser(self, uid, json):
+    def addUser(self, json):
         uname = json['uname']
         upassword = json['upassword']
         fname = json['fname']
         lname = json['lname']
-        followers = json['followers']
         dao = UserDAO()
-        dao.addUser(uid, uname, upassword, fname, lname, followers)
-        result = self.build_attr_dict(uid, uname, upassword, fname, lname, followers)
+        uid = dao.addUser(uname, upassword, fname, lname)
+        result = self.build_attr_dict(uid, uname, upassword, fname, lname, 0)
         return jsonify(result), 201
 
     def retrieveUsers(self):
@@ -39,7 +38,7 @@ class BaseUser:
         users_list = dao.getAllUsers()
         result_list = []
         for row in users_list:
-            obj = self.build_attr_dict(row)
+            obj = self.build_map_dict(row)
             result_list.append(obj)
         if result_list:
             return jsonify(result_list), 200
@@ -67,5 +66,9 @@ class BaseUser:
 
     def getUserId(self, uid):
         dao = UserDAO()
-        result = dao.getUserId(uid)
-        return jsonify(result)
+        tuple = dao.getUserId(uid)
+        if not tuple:
+            return jsonify("Not Found"), 404
+        else:
+            result = self.build_map_dict(tuple)
+            return jsonify(result), 200

@@ -9,11 +9,10 @@ class UserDAO:
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
-    def addUser(self, uname, upassword, fname, lname, followers):
+    def addUser(self, uname, upassword, fname, lname):
         cursor = self.conn.cursor()
-        query = "insert into users (uname, upassword, fname, lname, followers)" \
-                "values (%s, %s, %s, %s, %s) returning uid"
-        cursor.execute(query, (uname, upassword, fname, lname, followers))
+        query = "insert into users (uname, upassword, fname, lname, followers) values (%s, %s, %s, %s, 0) returning uid;"
+        cursor.execute(query, (uname, upassword, fname, lname))
         uid = cursor.fetchone()[0]
         self.conn.commit()
         return uid
@@ -29,7 +28,7 @@ class UserDAO:
 
     def updateUser(self, uid, uname, upassword, fname, lname, followers):
         cursor = self.conn.cursor()
-        query = "update users (uname, upassword, fname, lname, followers) where uid=%s "
+        query = "update users set uname = %s, upassword=%s, fname=%s, lname=%s, followers=%s where uid=%s;"
         cursor.execute(query, (uname, upassword, fname, lname, followers, uid))
         self.conn.commit()
         return True
@@ -43,7 +42,8 @@ class UserDAO:
 
     def getUserId(self, uid):
         cursor = self.conn.cursor()
-        query = "select from users where uid=%s"
-        cursor.execute(query)
-        self.conn.commit()
-        return True
+        query = "select uid, uname, upassword, fname, lname, followers from users where uid=%s"
+        cursor.execute(query, (uid,))
+        uid = cursor.fetchone()
+        #self.conn.commit()
+        return uid
