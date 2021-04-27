@@ -6,9 +6,10 @@ Anthony Rivera - anthony.rivera10@upr.edu
 
 ER Video: https://drive.google.com/file/d/1C7pQvszFAFqDgk8ScXROuOtbS1W5qxAf/view?usp=sharing
 
-Heroku Rest Api Link: https://engies.herokuapp.com/
+Heroku Rest Api Link: https://engies.herokuapp.com/engies
 
 Add New User:  
+https://engies.herokuapp.com/engies/users  
 {  
   "uname": ""  
   "upassword": ""  
@@ -17,6 +18,7 @@ Add New User:
 }  
 
 Update User:  
+https://engies.herokuapp.com/engies/users/<user id>  
 {  
   "uname": ""  
   "upassword": ""  
