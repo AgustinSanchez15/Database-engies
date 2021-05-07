@@ -4,7 +4,7 @@ import psycopg2
 
 class FollowersDAO:
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s port=%s host='localhost'" % (
+        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-54-224-120-186.compute-1.amazonaws.com'" % (
             pg_config['dbname'], pg_config['user'],
             pg_config['password'], pg_config['dbport'])
         print("conection url:  ", connection_url)
