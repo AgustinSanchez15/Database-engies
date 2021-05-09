@@ -12,16 +12,19 @@ class BaseFollowers:
     def build_attr_dict(self, uid, fuid):
         result = {}
         result['uid'] = uid
-        result['uname'] = fuid
+        result['fuid'] = fuid
         return result
 
     def insertFollowers(self, uid, json):
         RegisteredUser = json['RegisteredUser']
         dao = FollowersDAO()
-        uid = dao.insertFollowers(RegisteredUser, uid)
-        result = self.build_attr_dict(uid, RegisteredUser)
-        return jsonify(result), 201
-
+        tuple = dao.checkBlock(uid, RegisteredUser)
+        if not tuple:
+            uid = dao.insertFollowers(RegisteredUser, uid)
+            result = self.build_attr_dict(uid, RegisteredUser)
+            return jsonify(result), 201
+        else:
+            return jsonify("uid is blocking RegisteredUser"), 404
 
     def getFollowing(self, uid):
         dao = FollowersDAO()

@@ -15,7 +15,14 @@ class FollowersDAO:
         query= "insert into followers (uid, fuid) values (%s,%s)"
         cursor.execute(query, (uid, fuid))
         self.conn.commit()
-        return True
+        return fuid
+
+    def checkBlock(self, uid, fuid):
+        cursor = self.conn.cursor()
+        query = "select uid, buid from blocks where uid=%s and buid=%s"
+        cursor.execute(query, (uid, fuid))
+        uid = cursor.fetchone()
+        return uid
 
     def getFollowing(self, uid):
         cursor = self.conn.cursor()

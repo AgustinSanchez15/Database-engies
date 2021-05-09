@@ -11,7 +11,7 @@ class BaseLike:
 
     def build_attr_dict(self, uid, RegisteredUser):
         result = {}
-        result['uid'] = uid
+        result['pid'] = uid
         result['RegisteredUser'] = RegisteredUser
         return result
 

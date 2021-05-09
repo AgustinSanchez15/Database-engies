@@ -11,9 +11,10 @@ class BaseUser:
         result['fname'] = row[3]
         result['lname'] = row[4]
         result['followers'] = row[5]
+        result['visible'] = row[6]
         return result
 
-    def build_attr_dict(self, uid, uname, upassword, fname, lname, followers):
+    def build_attr_dict(self, uid, uname, upassword, fname, lname, followers, visible):
         result = {}
         result['uid'] = uid
         result['uname'] = uname
@@ -21,16 +22,17 @@ class BaseUser:
         result['fname'] = fname
         result['lname'] = lname
         result['followers'] = followers
+        result['visible'] = visible
         return result
 
-    def addUser(self, json):
-        uname = json['uname']
-        upassword = json['upassword']
-        fname = json['fname']
-        lname = json['lname']
+    def addUser(self):
+        uname = "test"
+        upassword = "test"
+        fname = "test"
+        lname = "test"
         dao = UserDAO()
         uid = dao.addUser(uname, upassword, fname, lname)
-        result = self.build_attr_dict(uid, uname, upassword, fname, lname, 0)
+        result = self.build_attr_dict(uid, uname, upassword, fname, lname, 0, 1)
         return jsonify(result), 201
 
     def retrieveUsers(self):

@@ -87,14 +87,14 @@ def handleAddFollower(uid):
     else:
         return jsonify("Method Not Allowed"), 405
 
-@app.route('/engies/followedby/<int:uid>', methods=['GET'])
+@app.route('/engies/follows/<int:uid>', methods=['GET'])
 def handleGetFollowing(uid):
     if request.method == 'GET':
         return BaseFollowers().getFollowing(uid)
     else:
         return jsonify("Method Not Allowed"), 405
 
-@app.route('/engies/follows/<int:uid>', methods=['GET'])
+@app.route('/engies/followedby/<int:uid>', methods=['GET'])
 def handleGetFollower(uid):
     if request.method == 'GET':
         return BaseFollowers().getFollowers(uid)
@@ -149,14 +149,15 @@ def handleAddUser():
     if request.method == 'GET':
         return BaseUser().retrieveUsers()
     if request.method == 'POST':
-        return BaseUser().addUser(request.json)
+        return BaseUser().addUser()
     else:
         return jsonify("Method Not Allowed"), 405
 
 @app.route('/engies/users/<int:uid>', methods=['PUT', 'GET', 'DELETE'])
 def handlePUTSpecificUser(uid):
     if request.method == 'PUT':
-        return BaseUser().updateUser(uid, request.json)
+        #return BaseUser().updateUser(uid, request.json)
+        return BaseUser().getUserId(uid)
     elif request.method == 'DELETE':
         return BaseUser().deleteUser(uid)
     elif request.method == 'GET':

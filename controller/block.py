@@ -20,7 +20,10 @@ class BaseBlock:
         dao = BlockDAO()
         dao.blockUser(uid, RegisteredUser)
         result = self.build_attr_dict(uid, RegisteredUser)
-        return jsonify(result), 201
+        if result:
+            return jsonify(result), 201
+        else:
+            return jsonify("uid NOT FOUND"), 404
 
     def getBlocked(self, uid):
         dao = BlockDAO()
